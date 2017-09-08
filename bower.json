@@ -1,0 +1,13 @@
+{
+  "name": "react-weather-app",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Denis Boldyrev <boldyrev.ds@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/boldyrev-d/-react-weather-app",
+  "dependencies": {
+    "weather-icons": "^2.0.10"
+  }
+}
