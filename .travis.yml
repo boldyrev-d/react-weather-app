@@ -1,11 +1,13 @@
 language: node_js
 node_js:
   - "node"
+before_install:
+  - npm install -g bower  
 install:
   - yarn
+  - bower install
 script:
   - yarn lint
-  - bower install
 deploy:
   skip_cleanup: true
   on:
