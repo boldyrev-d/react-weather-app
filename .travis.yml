@@ -5,6 +5,7 @@ install:
   - yarn
 script:
   - yarn lint
+  - bower install
 deploy:
   skip_cleanup: true
   on:
