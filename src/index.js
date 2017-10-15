@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 
 import 'normalize.css';
 import './libs/weather-icons/css/weather-icons.css';
-import './index.css';
 
 import './polyfills';
 
