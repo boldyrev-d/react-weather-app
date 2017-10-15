@@ -1,7 +1,9 @@
-/* eslint-disable react/prefer-stateless-function */
-
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { loadWeather, loadCurrent, resetError } from '../AC';
+import { REFRESH_INTERVAL } from '../constants';
 
 const Wrapper = styled.main`
   display: grid;
@@ -73,20 +75,89 @@ const getTimesOfDay = () => {
   return hours >= 22 || hours <= 6 ? 'night' : 'day';
 };
 
+const getCelsiusFromKelvin = temp => Math.round(temp - 273.15);
+
 class Weather extends Component {
+  static propTypes = {
+    // from connect
+    weather: PropTypes.shape({
+      humidity: PropTypes.number,
+      name: PropTypes.string,
+      temp: PropTypes.number,
+      timestamp: PropTypes.number,
+      weatherID: PropTypes.number,
+      wind: PropTypes.number,
+    }).isRequired,
+    loading: PropTypes.bool.isRequired,
+    geolocation: PropTypes.bool.isRequired,
+    error: PropTypes.shape({
+      isError: PropTypes.bool.isRequired,
+      text: PropTypes.string.isRequired,
+    }).isRequired,
+    loadWeather: PropTypes.func.isRequired,
+    loadCurrent: PropTypes.func.isRequired,
+    resetError: PropTypes.func.isRequired,
+  };
+
+  componentDidMount() {
+    const { error: { isError } } = this.props;
+    if (isError) {
+      this.props.resetError();
+    }
+
+    this.init(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.init(nextProps);
+  }
+
+  init = (propsSource) => {
+    const { loading, weather } = propsSource;
+
+    if (Date.now() - weather.timestamp > REFRESH_INTERVAL && !loading) {
+      if (propsSource.geolocation) {
+        this.props.loadCurrent();
+      } else {
+        this.props.loadWeather(weather.name);
+      }
+    }
+  };
+
   render() {
-    // FIXME
-    const weatherID = '802';
-    const temp = 10;
-    const humidity = 70;
-    const wind = 5;
+    const { loading, geolocation, error } = this.props;
+    const { weatherID, name, temp, humidity, wind } = this.props.weather;
 
     const weatherClass = `wi wi-owm-${getTimesOfDay()}-${weatherID}`;
 
-    return (
-      <Wrapper temp={temp}>
+    const weatherBody = (() => {
+      if (
+        Object.keys(this.props.weather).length === 0 &&
+        !loading &&
+        !geolocation &&
+        !error.isError
+      ) {
+        return (
+          <Inner>
+            <h1>Add city or choose current location</h1>
+          </Inner>
+        );
+      } else if (loading) {
+        return (
+          <Inner>
+            <h1>Loading weather...</h1>
+          </Inner>
+        );
+      } else if (error.isError) {
+        return (
+          <Inner>
+            <h1>{error.text}</h1>
+          </Inner>
+        );
+      }
+      return (
         <Inner>
-          <CityName>Moscow</CityName>
+          <CityName>{name}</CityName>
 
           <IconWrapper>
             <Icon className={weatherClass} />
@@ -94,7 +165,7 @@ class Weather extends Component {
 
           <DetailWrapper>
             <Temp>
-              <span>{temp}</span>
+              <span>{getCelsiusFromKelvin(temp)}</span>
               <span className="wi wi-degrees" />
             </Temp>
 
@@ -109,9 +180,26 @@ class Weather extends Component {
             </Wind>
           </DetailWrapper>
         </Inner>
-      </Wrapper>
-    );
+      );
+    })();
+
+    return <Wrapper temp={getCelsiusFromKelvin(temp)}>{weatherBody}</Wrapper>;
   }
 }
 
-export default Weather;
+export default connect(
+  (state) => {
+    const { activeCity, cities, currentLocationWeather, geolocation, loading, error } = state;
+
+    return {
+      weather:
+        Object.values(cities).filter(city => city.name === activeCity)[0] ||
+        (geolocation && currentLocationWeather) ||
+        {},
+      loading,
+      geolocation,
+      error,
+    };
+  },
+  { loadWeather, loadCurrent, resetError },
+)(Weather);

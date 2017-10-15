@@ -1,7 +1,9 @@
-/* eslint-disable react/prefer-stateless-function */
-
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import NewCityForm from './NewCityForm';
+import { loadWeather, deleteCity, changeCity, loadCurrent } from '../AC';
 
 const Sidebar = styled.aside`
   padding: 20px;
@@ -13,6 +15,20 @@ const List = styled.ul`
   margin: 30px 0;
   padding: 0;
   list-style-type: none;
+`;
+
+const RefreshButton = styled.i`
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  opacity: 0;
+  cursor: pointer;
 `;
 
 const RemoveButton = styled.i`
@@ -46,7 +62,8 @@ const RemoveButton = styled.i`
 
 const Item = styled.li`
   position: relative;
-  font-weight: ${props => (props.active ? 'bold' : 'normal')};
+  padding-right: 55px;
+  font-weight: ${props => (props.active === 'true' ? 'bold' : 'normal')};
   cursor: pointer;
 
   &:not(:last-child) {
@@ -57,59 +74,96 @@ const Item = styled.li`
     font-weight: bold;
   }
 
-  &:hover ${RemoveButton} {
+  &:hover ${RemoveButton}, &:hover ${RefreshButton} {
     opacity: 1;
   }
 `;
 
-const Form = styled.form``;
+const Cities = (props) => {
+  /* eslint-disable no-shadow */
+  const {
+    activeCity,
+    cities,
+    geolocation,
+    loadWeather,
+    deleteCity,
+    changeCity,
+    loadCurrent,
+  } = props;
+  /* eslint-enable no-shadow */
 
-const Input = styled.input`
-  display: block;
-  margin: 0 auto 10px;
-  padding: 5px 10px;
-  width: 100%;
-  box-sizing: border-box;
-  font-family: 'Oswald', sand-serif;
-  color: #fff;
-  border: 1px solid #fff;
-  background-color: transparent;
-`;
+  const cityList = Object.values(cities).map((city) => {
+    const active = activeCity === city.name ? 'true' : 'false';
 
-const Button = styled.button`
-  display: block;
-  margin: 0 auto 10px;
-  padding: 5px 12px;
-  background-color: #233884;
-  font-family: 'Oswald', sand-serif;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-`;
-
-class Cities extends Component {
-  render() {
     return (
-      <Sidebar>
-        <List>
-          <Item>
-            Current location<RemoveButton />
-          </Item>
-          <Item active>
-            Moscow<RemoveButton />
-          </Item>
-          <Item>
-            Saint-P<RemoveButton />
-          </Item>
-        </List>
-
-        <Form onSubmit={e => e.preventDefault()}>
-          <Input type="text" />
-          <Button>Add city</Button>
-        </Form>
-      </Sidebar>
+      <Item
+        key={city.name}
+        active={active}
+        onClick={() => {
+          changeCity(city.name);
+        }}
+      >
+        {city.name}
+        <RefreshButton
+          title="Refresh weather"
+          onClick={(e) => {
+            e.stopPropagation();
+            loadWeather(city.name);
+          }}
+        />
+        <RemoveButton
+          title="Remove city"
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteCity(city.name);
+          }}
+        />
+      </Item>
     );
-  }
-}
+  });
 
-export default Cities;
+  return (
+    <Sidebar>
+      <List>
+        <Item active={geolocation ? 'true' : 'false'} onClick={() => loadCurrent()}>
+          Current location
+        </Item>
+        {cityList}
+      </List>
+
+      <NewCityForm />
+    </Sidebar>
+  );
+};
+
+Cities.propTypes = {
+  // from connect
+  activeCity: PropTypes.string.isRequired,
+  cities: PropTypes.objectOf(
+    PropTypes.shape({
+      humidity: PropTypes.number,
+      name: PropTypes.string,
+      temp: PropTypes.number,
+      timestamp: PropTypes.number,
+      weatherID: PropTypes.number,
+      wind: PropTypes.number,
+    }),
+  ).isRequired,
+  geolocation: PropTypes.bool.isRequired,
+  loadWeather: PropTypes.func.isRequired,
+  deleteCity: PropTypes.func.isRequired,
+  changeCity: PropTypes.func.isRequired,
+  loadCurrent: PropTypes.func.isRequired,
+};
+
+export default connect(
+  (state) => {
+    const { activeCity, cities, geolocation } = state;
+    return {
+      activeCity,
+      cities,
+      geolocation,
+    };
+  },
+  { loadWeather, deleteCity, changeCity, loadCurrent },
+)(Cities);
