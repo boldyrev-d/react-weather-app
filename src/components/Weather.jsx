@@ -176,7 +176,7 @@ class Weather extends Component {
 
             <Wind>
               <i className="wi wi-small-craft-advisory" />
-              {` ${wind} km/h`}
+              {` ${wind} m/s`}
             </Wind>
           </DetailWrapper>
         </Inner>
