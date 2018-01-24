@@ -1,7 +1,6 @@
 import {
   DELETE_CITY,
   CHANGE_CITY,
-  LOAD_TO_LOCAL,
   LOAD_CURRENT,
   LOAD_WEATHER,
   START,
@@ -10,10 +9,6 @@ import {
   RESET_ERROR,
 } from '../constants';
 import { getWeatherByCity, getWeatherByLoc } from '../api';
-
-export const loadToLocal = () => ({
-  type: LOAD_TO_LOCAL,
-});
 
 export const loadWeather = name => (dispatch) => {
   dispatch({
@@ -37,32 +32,23 @@ export const loadWeather = name => (dispatch) => {
             text: error.message,
           },
         });
-      })
-      .then(setTimeout(() => dispatch(loadToLocal()), 300)); // TODO: WTF WITH THIS ASYNC? :(
+      });
   }, 300);
 };
 
-export const deleteCity = name => (dispatch) => {
-  dispatch({
-    type: DELETE_CITY,
-    payload: {
-      name,
-    },
-  });
+export const deleteCity = name => ({
+  type: DELETE_CITY,
+  payload: {
+    name,
+  },
+});
 
-  dispatch(loadToLocal());
-};
-
-export const changeCity = name => (dispatch) => {
-  dispatch({
-    type: CHANGE_CITY,
-    payload: {
-      name,
-    },
-  });
-
-  dispatch(loadToLocal());
-};
+export const changeCity = name => ({
+  type: CHANGE_CITY,
+  payload: {
+    name,
+  },
+});
 
 export const loadCurrent = () => (dispatch) => {
   dispatch({
@@ -79,16 +65,14 @@ export const loadCurrent = () => (dispatch) => {
         currentLon = position.coords.longitude;
 
         setTimeout(() => {
-          getWeatherByLoc(currentLat, currentLon)
-            .then((response) => {
-              dispatch({
-                type: LOAD_CURRENT + SUCCESS,
-                payload: {
-                  ...response,
-                },
-              });
-            })
-            .then(setTimeout(() => dispatch(loadToLocal()), 300)); // TODO: WTF WITH THIS ASYNC? :(
+          getWeatherByLoc(currentLat, currentLon).then((response) => {
+            dispatch({
+              type: LOAD_CURRENT + SUCCESS,
+              payload: {
+                ...response,
+              },
+            });
+          });
         }, 300);
       },
       (error) => {

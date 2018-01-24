@@ -1,7 +1,6 @@
 import {
   DELETE_CITY,
   CHANGE_CITY,
-  LOAD_TO_LOCAL,
   LOAD_CURRENT,
   LOAD_WEATHER,
   START,
@@ -10,8 +9,7 @@ import {
   RESET_ERROR,
 } from '../constants';
 
-const localState = localStorage.getItem('weather');
-const defaultState = (localState && JSON.parse(localState)) || {
+const defaultState = {
   activeCity: '',
   cities: {},
   currentLocationWeather: {},
@@ -127,10 +125,6 @@ export default (state = defaultState, action) => {
           text: payload.text,
         },
       };
-
-    case LOAD_TO_LOCAL:
-      localStorage.setItem('weather', JSON.stringify(state));
-      return state;
 
     case RESET_ERROR:
       return {
