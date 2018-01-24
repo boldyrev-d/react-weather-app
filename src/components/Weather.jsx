@@ -126,7 +126,9 @@ class Weather extends Component {
 
   render() {
     const { loading, geolocation, error } = this.props;
-    const { weatherID, name, temp, humidity, wind } = this.props.weather;
+    const {
+      weatherID, name, temp, humidity, wind,
+    } = this.props.weather;
 
     const weatherClass = `wi wi-owm-${getTimesOfDay()}-${weatherID}`;
 
@@ -189,7 +191,9 @@ class Weather extends Component {
 
 export default connect(
   (state) => {
-    const { activeCity, cities, currentLocationWeather, geolocation, loading, error } = state;
+    const {
+      activeCity, cities, currentLocationWeather, geolocation, loading, error,
+    } = state;
 
     return {
       weather:

@@ -139,16 +139,14 @@ const Cities = (props) => {
 Cities.propTypes = {
   // from connect
   activeCity: PropTypes.string.isRequired,
-  cities: PropTypes.objectOf(
-    PropTypes.shape({
-      humidity: PropTypes.number,
-      name: PropTypes.string,
-      temp: PropTypes.number,
-      timestamp: PropTypes.number,
-      weatherID: PropTypes.number,
-      wind: PropTypes.number,
-    }),
-  ).isRequired,
+  cities: PropTypes.objectOf(PropTypes.shape({
+    humidity: PropTypes.number,
+    name: PropTypes.string,
+    temp: PropTypes.number,
+    timestamp: PropTypes.number,
+    weatherID: PropTypes.number,
+    wind: PropTypes.number,
+  })).isRequired,
   geolocation: PropTypes.bool.isRequired,
   loadWeather: PropTypes.func.isRequired,
   deleteCity: PropTypes.func.isRequired,
@@ -165,5 +163,7 @@ export default connect(
       geolocation,
     };
   },
-  { loadWeather, deleteCity, changeCity, loadCurrent },
+  {
+    loadWeather, deleteCity, changeCity, loadCurrent,
+  },
 )(Cities);
