@@ -15,7 +15,7 @@
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "styled-components": "^3.2.1"
+    "styled-components": "^3.2.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -27,13 +27,13 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
-    "eslint": "4.18.2",
+    "eslint": "4.19.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "2.9.0",
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "husky": "^0.14.3",
-    "now": "^10.1.5"
+    "now": "^10.2.1"
   },
   "now": {
     "alias": "react-weather-app"
