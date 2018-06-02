@@ -14,8 +14,8 @@
     "redux": "^4.0.0",
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0",
-    "styled-components": "^3.3.0"
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^2.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,7 +33,7 @@
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "^7.8.2",
     "husky": "^0.14.3",
-    "now": "^11.1.14"
+    "now": "^11.2.1"
   },
   "now": {
     "alias": "react-weather-app"
