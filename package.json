@@ -7,8 +7,8 @@
     "normalize.css": "^8.0.0",
     "object.values": "^1.0.4",
     "prop-types": "^15.6.1",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
     "react-scripts": "1.1.4",
     "redux": "^4.0.0",
@@ -33,7 +33,7 @@
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "^7.9.1",
     "husky": "^0.14.3",
-    "now": "^11.2.2"
+    "now": "^11.2.4"
   },
   "now": {
     "alias": "react-weather-app"
