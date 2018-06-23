@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import NewCityForm from './NewCityForm';
-import { loadWeather, deleteCity, changeCity, loadCurrent } from '../AC';
+import {
+  loadWeather, deleteCity, changeCity, loadCurrent,
+} from '../AC';
 
 const Sidebar = styled.aside`
   padding: 20px;
@@ -63,7 +65,7 @@ const RemoveButton = styled.i`
 const Item = styled.li`
   position: relative;
   padding-right: 55px;
-  font-weight: ${props => (props.active === 'true' ? 'bold' : 'normal')};
+  font-weight: ${({ active }) => (active === 'true' ? 'bold' : 'normal')};
   cursor: pointer;
 
   &:not(:last-child) {
@@ -139,14 +141,16 @@ const Cities = (props) => {
 Cities.propTypes = {
   // from connect
   activeCity: PropTypes.string.isRequired,
-  cities: PropTypes.objectOf(PropTypes.shape({
-    humidity: PropTypes.number,
-    name: PropTypes.string,
-    temp: PropTypes.number,
-    timestamp: PropTypes.number,
-    weatherID: PropTypes.number,
-    wind: PropTypes.number,
-  })).isRequired,
+  cities: PropTypes.objectOf(
+    PropTypes.shape({
+      humidity: PropTypes.number,
+      name: PropTypes.string,
+      temp: PropTypes.number,
+      timestamp: PropTypes.number,
+      weatherID: PropTypes.number,
+      wind: PropTypes.number,
+    }),
+  ).isRequired,
   geolocation: PropTypes.bool.isRequired,
   loadWeather: PropTypes.func.isRequired,
   deleteCity: PropTypes.func.isRequired,
@@ -164,6 +168,9 @@ export default connect(
     };
   },
   {
-    loadWeather, deleteCity, changeCity, loadCurrent,
+    loadWeather,
+    deleteCity,
+    changeCity,
+    loadCurrent,
   },
 )(Cities);

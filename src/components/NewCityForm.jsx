@@ -42,8 +42,12 @@ class NewCityForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    if (this.state.text) {
-      this.props.loadWeather(this.state.text);
+    const { text } = this.state;
+    // eslint-disable-next-line no-shadow
+    const { loadWeather } = this.props;
+
+    if (text) {
+      loadWeather(text);
 
       this.setState({
         text: '',
@@ -51,19 +55,25 @@ class NewCityForm extends Component {
     }
   };
 
-  handleChange = e =>
-    this.setState({
-      text: e.target.value,
-    });
+  handleChange = e => this.setState({
+    text: e.target.value,
+  });
 
   render() {
+    const { text } = this.state;
+
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Input type="text" value={this.state.text} onChange={this.handleChange} />
-        <SubmitButton>Add city</SubmitButton>
+        <Input type="text" value={text} onChange={this.handleChange} />
+        <SubmitButton>
+Add city
+        </SubmitButton>
       </Form>
     );
   }
 }
 
-export default connect(null, { loadWeather })(NewCityForm);
+export default connect(
+  null,
+  { loadWeather },
+)(NewCityForm);

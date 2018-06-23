@@ -65,21 +65,22 @@ export default (state = defaultState, action) => {
         },
       };
 
-    // eslint-disable-next-line no-case-declarations
     case DELETE_CITY:
+      // eslint-disable-next-line no-case-declarations
       const cities = { ...state.cities };
       delete cities[payload.name];
 
-      let activeCity;
-      if (state.geolocation) {
-        activeCity = '';
-      } else {
-        activeCity = Object.keys(cities).length ? Object.keys(cities)[0] : '';
+      if (!state.geolocation) {
+        return {
+          ...state,
+          activeCity: Object.keys(cities).length ? Object.keys(cities)[0] : '',
+          cities,
+        };
       }
 
       return {
         ...state,
-        activeCity,
+        activeCity: '',
         cities,
       };
 

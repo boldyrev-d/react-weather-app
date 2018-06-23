@@ -7,16 +7,20 @@ import { REFRESH_INTERVAL } from '../constants';
 
 const Wrapper = styled.main`
   display: grid;
-  background-color: ${(props) => {
-    if (props.temp >= 30) {
+  background-color: ${({ temp }) => {
+    if (temp >= 30) {
       return '#FF8500';
-    } else if (props.temp >= 20 && props.temp < 30) {
+    }
+    if (temp >= 20 && temp < 30) {
       return '#ffc600';
-    } else if (props.temp >= 10 && props.temp < 20) {
+    }
+    if (temp >= 10 && temp < 20) {
       return '#94AF10';
-    } else if (props.temp > 0 && props.temp < 10) {
+    }
+    if (temp > 0 && temp < 10) {
       return '#06799F';
     }
+
     return '#233884';
   }};
 `;
@@ -100,9 +104,13 @@ class Weather extends Component {
   };
 
   componentDidMount() {
-    const { error: { isError } } = this.props;
+    const {
+      error: { isError },
+      // eslint-disable-next-line no-shadow
+      resetError,
+    } = this.props;
     if (isError) {
-      this.props.resetError();
+      resetError();
     }
 
     this.init(this.props);
@@ -114,12 +122,14 @@ class Weather extends Component {
 
   init = (propsSource) => {
     const { loading, weather } = propsSource;
+    // eslint-disable-next-line no-shadow
+    const { loadCurrent, loadWeather } = this.props;
 
     if (Date.now() - weather.timestamp > REFRESH_INTERVAL && !loading) {
       if (propsSource.geolocation) {
-        this.props.loadCurrent();
+        loadCurrent();
       } else {
-        this.props.loadWeather(weather.name);
+        loadWeather(weather.name);
       }
     }
   };
@@ -127,39 +137,48 @@ class Weather extends Component {
   render() {
     const { loading, geolocation, error } = this.props;
     const {
-      weatherID, name, temp, humidity, wind,
-    } = this.props.weather;
+      weather,
+      weather: {
+        weatherID, name, temp, humidity, wind,
+      },
+    } = this.props;
 
     const weatherClass = `wi wi-owm-${getTimesOfDay()}-${weatherID}`;
 
     const weatherBody = (() => {
-      if (
-        Object.keys(this.props.weather).length === 0 &&
-        !loading &&
-        !geolocation &&
-        !error.isError
-      ) {
+      if (Object.keys(weather).length === 0 && !loading && !geolocation && !error.isError) {
         return (
           <Inner>
-            <h1>Add city or choose current location</h1>
+            <h1>
+Add city or choose current location
+              {' '}
+            </h1>
           </Inner>
         );
-      } else if (loading) {
+      }
+      if (loading) {
         return (
           <Inner>
-            <h1>Loading weather...</h1>
+            <h1>
+Loading weather...
+            </h1>
           </Inner>
         );
-      } else if (error.isError) {
+      }
+      if (error.isError) {
         return (
           <Inner>
-            <h1>{error.text}</h1>
+            <h1>
+              {error.text}
+            </h1>
           </Inner>
         );
       }
       return (
         <Inner>
-          <CityName>{name}</CityName>
+          <CityName>
+            {name}
+          </CityName>
 
           <IconWrapper>
             <Icon className={weatherClass} />
@@ -167,7 +186,9 @@ class Weather extends Component {
 
           <DetailWrapper>
             <Temp>
-              <span>{getCelsiusFromKelvin(temp)}</span>
+              <span>
+                {getCelsiusFromKelvin(temp)}
+              </span>
               <span className="wi wi-degrees" />
             </Temp>
 
@@ -185,7 +206,11 @@ class Weather extends Component {
       );
     })();
 
-    return <Wrapper temp={getCelsiusFromKelvin(temp)}>{weatherBody}</Wrapper>;
+    return (
+      <Wrapper temp={getCelsiusFromKelvin(temp)}>
+        {weatherBody}
+      </Wrapper>
+    );
   }
 }
 
@@ -197,9 +222,9 @@ export default connect(
 
     return {
       weather:
-        Object.values(cities).filter(city => city.name === activeCity)[0] ||
-        (geolocation && currentLocationWeather) ||
-        {},
+        Object.values(cities).filter(city => city.name === activeCity)[0]
+        || (geolocation && currentLocationWeather)
+        || {},
       loading,
       geolocation,
       error,
