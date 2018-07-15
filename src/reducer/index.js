@@ -1,3 +1,5 @@
+/* eslint-disable no-case-declarations */
+
 import {
   DELETE_CITY,
   CHANGE_CITY,
@@ -66,7 +68,6 @@ export default (state = defaultState, action) => {
       };
 
     case DELETE_CITY:
-      // eslint-disable-next-line no-case-declarations
       const cities = { ...state.cities };
       delete cities[payload.name];
 
