@@ -33,7 +33,7 @@
     "eslint-plugin-jsx-a11y": "6.1.1",
     "eslint-plugin-react": "^7.10.0",
     "husky": "^0.14.3",
-    "now": "^11.3.0"
+    "now": "^11.3.2"
   },
   "now": {
     "alias": "react-weather-app"
