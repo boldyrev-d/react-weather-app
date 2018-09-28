@@ -7,35 +7,39 @@
     "normalize.css": "^8.0.0",
     "object.values": "^1.0.4",
     "prop-types": "^15.6.2",
-    "react": "^16.5.0",
-    "react-dom": "^16.5.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
     "react-scripts": "1.1.5",
     "redux": "^4.0.0",
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^3.4.5"
+    "styled-components": "^3.4.9"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .jsx --ext .js src/",
-    "prepush": "yarn lint"
+    "lint": "eslint --ext .jsx --ext .js src/"
   },
   "devDependencies": {
-    "babel-eslint": "^9.0.0",
-    "eslint": "5.5.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "5.6.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "husky": "^0.14.3",
-    "now": "^11.4.1"
+    "husky": "^1.0.1",
+    "now": "^11.4.6"
   },
   "now": {
     "alias": "react-weather-app"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn lint"
+    }
   }
 }
